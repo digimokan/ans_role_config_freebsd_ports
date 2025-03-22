@@ -10,7 +10,7 @@
   when: freebsd_ports_src_tree_to_build_from == 'current'
 
 - name: "Calculate release branch to use for source tree, from the system version"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: >-
       printf "releng/%s" "$(freebsd-version -u | cut -d"-" -f1)"
   register: system_rel_result
