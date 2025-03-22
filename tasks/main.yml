@@ -1,0 +1,9 @@
+- name: "Clone, update and check out the ports tree"
+  ansible.builtin.include_tasks: ports_tree/main.yml
+
+- name: "Clone, update and check out the source tree"
+  ansible.builtin.include_tasks: source_tree/main.yml
+
+- name: "Build and install each port"
+  ansible.builtin.include_tasks: build_install/main.yml
+

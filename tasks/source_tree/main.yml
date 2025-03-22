@@ -1,0 +1,37 @@
+- name: "Abort if freebsd_ports_src_tree_to_build_from is invalid"
+  ansible.builtin.fail:
+    msg: "freebsd_ports_src_tree_to_build_from must be 'current' or 'system_release'"
+  when: (freebsd_ports_src_tree_to_build_from != 'current') and
+        (freebsd_ports_src_tree_to_build_from != 'system_release')
+
+- name: "Use 'main' source tree repo branch, to build from CURRENT/HEAD"
+  set_fact:
+    freebsd_ports_src_tree_branch: "main"
+  when: freebsd_ports_src_tree_to_build_from == 'current'
+
+- name: "Calculate release branch to use for source tree, from the system version"
+  ansible.builtin.command:
+    cmd: >-
+      printf "releng/%s" "$(freebsd-version -u | cut -d"-" -f1)"
+  register: system_rel_result
+  changed_when: false
+  become: true
+  become_user: root
+  when: freebsd_ports_src_tree_to_build_from == 'system_release'
+
+- name: "Use '{{ system_rel_result.stdout }}' source tree repo branch"
+  set_fact:
+    freebsd_ports_src_tree_branch: "{{ system_rel_result.stdout }}"
+    when: freebsd_ports_src_tree_to_build_from == 'system_release'
+
+- name: "Update source tree '{{ freebsd_ports_src_tree_branch }}' branch at '{{ freebsd_ports_src_tree_path_on_system }}'"
+  ansible.builtin.git:
+    repo: "{{ freebsd_ports_src_tree_upstream_url }}"
+    dest: "{{ freebsd_ports_src_tree_path_on_system }}"
+    single_branch: true
+    version: "{{ freebsd_ports_src_tree_branch }}"
+    depth: 1
+    update: true
+  become: true
+  become_user: root
+

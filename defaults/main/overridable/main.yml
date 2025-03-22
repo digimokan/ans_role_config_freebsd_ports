@@ -1,0 +1,20 @@
+# if true, always clean, rebuild, and reinstall all ports
+freebsd_ports_always_rebuild_and_reinstall: false
+
+# "/usr/ports" tree branch to use when building ports
+# see repo at https://github.com/freebsd/freebsd-ports/branches
+#   "2025Q1" etc to build from a specific quarterly branch
+#   "current" to build from latest/current/HEAD of ports tree
+#   "quarterly" to automatically set/build from the current quarterly branch
+freebsd_ports_ports_tree_to_build_from: "quarterly"
+freebsd_ports_ports_tree_upstream_url: "https://github.com/freebsd/freebsd-ports"
+freebsd_ports_ports_tree_path_on_system: "/usr/ports"
+
+# "/usr/src" tree branch to use when building ports
+# see repo at https://github.com/freebsd/freebsd-src/branches
+#   "current" to build with latest/current/HEAD of source tree
+#   "system_release" to use the OS *RELEASE* version detected on the system
+freebsd_ports_src_tree_to_build_from: "system_release"
+freebsd_ports_src_tree_upstream_url: "https://github.com/freebsd/freebsd-src"
+freebsd_ports_src_tree_path_on_system: "/usr/src"
+

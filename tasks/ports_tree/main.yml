@@ -1,0 +1,38 @@
+- name: "Use '{{ freebsd_ports_ports_tree_to_build_from }}' ports tree repo branch"
+  set_fact:
+    freebsd_ports_ports_tree_branch: "{{ freebsd_ports_ports_tree_to_build_from }}"
+  when: (freebsd_ports_ports_tree_to_build_from != 'current') and
+        (freebsd_ports_ports_tree_to_build_from != 'quarterly')
+
+- name: "Use 'main' ports tree repo branch, to build from CURRENT/HEAD"
+  set_fact:
+    freebsd_ports_ports_tree_branch: "main"
+  when: freebsd_ports_ports_tree_to_build_from == 'current'
+
+- name: "Calculate quarterly branch to use for ports tree, from the current date and time"
+  ansible.builtin.command:
+    cmd: >-
+      date "+%Y +%m" |
+      awk '{quarter=int($2/4)+1; printf("%sQ%s", $1, quarter);}'
+  register: quarter_num_result
+  changed_when: false
+  become: true
+  become_user: root
+  when: freebsd_ports_ports_tree_to_build_from == 'quarterly'
+
+- name: "Use '{{ quarter_num_result.stdout }}' ports tree repo branch"
+  set_fact:
+    freebsd_ports_ports_tree_branch: "{{ quarter_num_result.stdout }}"
+  when: freebsd_ports_ports_tree_to_build_from == 'quarterly'
+
+- name: "Update ports tree '{{ freebsd_ports_ports_tree_branch }}' branch at '{{ freebsd_ports_ports_tree_path_on_system }}'"
+  ansible.builtin.git:
+    repo: "{{ freebsd_ports_ports_tree_upstream_url }}"
+    dest: "{{ freebsd_ports_ports_tree_path_on_system }}"
+    single_branch: true
+    version: "{{ freebsd_ports_ports_tree_branch }}"
+    depth: 1
+    update: true
+  become: true
+  become_user: root
+

@@ -1,0 +1,3 @@
+# list of port names to build and install
+freebsd_ports_package_list: []
+
