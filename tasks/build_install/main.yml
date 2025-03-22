@@ -1,8 +1,7 @@
 - name: "Clean and uninstall all ports"
   ansible.builtin.command:
-    cmd: >-
-      cd "{{ freebsd_ports_ports_tree_path_on_system }}/{{ port_name }}" &&
-      make deinstall clean
+    chdir: "{{ freebsd_ports_ports_tree_path_on_system }}/{{ port_name }}"
+    cmd: "make deinstall clean"
   become: true
   become_user: root
   loop: "{{ freebsd_ports_package_list }}"
@@ -12,9 +11,8 @@
 
 - name: "Build and install all ports"
   ansible.builtin.command:
-    cmd: >-
-      cd "{{ freebsd_ports_ports_tree_path_on_system }}/{{ port_name }}" &&
-      make install BATCH=yes
+    chdir: "{{ freebsd_ports_ports_tree_path_on_system }}/{{ port_name }}"
+    cmd: "make install BATCH=yes"
   register: build_install_result
   changed_when: build_install_result.stdout | length > 0
   become: true
