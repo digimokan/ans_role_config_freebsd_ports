@@ -10,7 +10,7 @@
   when: freebsd_ports_ports_tree_to_build_from == 'current'
 
 - name: "Calculate quarterly branch to use for ports tree, from the current date and time"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: >-
       date "+%Y +%m" |
       awk '{quarter=int($2/4)+1; printf("%sQ%s", $1, quarter);}'
