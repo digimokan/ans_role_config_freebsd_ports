@@ -1,4 +1,8 @@
 # list of port names to build and install
+# Note: the role detects when a port needs to be rebuilt (i.e. the tree changed)
+# Note: the role detects when a port needs to be reinstalled
+# Note: if the corresponding *package* is installed, the role removes it and
+#       installs the built port
 # freebsd_ports_package_list:
 #   - { port_group_and_name: 'x11/wezterm', always_rebuild_reinstall: false }
 freebsd_ports_package_list: []
