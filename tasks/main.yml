@@ -4,9 +4,6 @@
 - name: "Clone, update and check out the source tree"
   ansible.builtin.include_tasks: source_tree/main.yml
 
-- name: "Build and install each port"
-  ansible.builtin.include_tasks: build_install/main.yml
-
 - name: "Build and install all ports"
   ansible.builtin.include_tasks: build_install/main.yml
   vars:
