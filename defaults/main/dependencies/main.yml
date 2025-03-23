@@ -1,3 +1,5 @@
 # list of port names to build and install
+# freebsd_ports_package_list:
+#   - { port_group_and_name: 'x11/wezterm', always_rebuild_reinstall: false }
 freebsd_ports_package_list: []
 

@@ -7,3 +7,11 @@
 - name: "Build and install each port"
   ansible.builtin.include_tasks: build_install/main.yml
 
+- name: "Build and install all ports"
+  ansible.builtin.include_tasks: build_install/main.yml
+  vars:
+    port_name: "{{ item.port_group_and_name }}"
+    port_path: "{{ freebsd_ports_ports_tree_path_on_system }}/{{ port_name }}"
+    clean_and_reinstall: "{{ item.always_rebuild_reinstall }}"
+  loop: "{{ freebsd_ports_package_list }}"
+

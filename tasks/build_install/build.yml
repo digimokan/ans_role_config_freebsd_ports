@@ -1,0 +1,25 @@
+- name: "Clean port '{{ port_name }}', since always_rebuild_reinstall is set to 'true'"
+  ansible.builtin.command:
+    chdir: "{{ port_path }}"
+    cmd: "make clean"
+  become: true
+  become_user: root
+  when: clean_and_reinstall
+
+- name: "Check whether latest port '{{ port_name }}' is already built"
+  ansible.builtin.shell:
+    chdir: "{{ port_path }}"
+    cmd: "make -n BATCH=yes | tail -n +2"
+  register: check_built_result
+  changed_when: check_built_result.stdout | length > 0
+  become: true
+  become_user: root
+
+- name: "Clean and build port '{{ port_name }}'"
+  ansible.builtin.shell:
+    chdir: "{{ port_path }}"
+    cmd: "make clean && make BATCH=yes"
+  become: true
+  become_user: root
+  when: check_built_result.changed
+

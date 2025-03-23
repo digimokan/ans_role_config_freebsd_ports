@@ -54,8 +54,8 @@ Build and install packages using the FreeBSD ports tree.
            name: ans_role_config_freebsd_ports
          vars:
            freebsd_ports_package_list:
-             - "graphics/drm-kmod"
-             - "x11/wezterm"
+             - { port_group_and_name: 'graphics/drm-61-kmod', always_rebuild_reinstall: false }
+             - { port_group_and_name: 'x11/wezterm', always_rebuild_reinstall: true }
    ```
 
 ## Role Options

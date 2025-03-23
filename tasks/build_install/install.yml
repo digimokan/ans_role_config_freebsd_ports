@@ -1,0 +1,25 @@
+- name: "Deinstall port '{{ port_name }}', since always_rebuild_reinstall is set to 'true'"
+  ansible.builtin.command:
+    chdir: "{{ port_path }}"
+    cmd: "make deinstall"
+  become: true
+  become_user: root
+  when: clean_and_reinstall
+
+- name: "Check whether latest port '{{ port_name }}' is already installed"
+  ansible.builtin.shell:
+    chdir: "{{ port_path }}"
+    cmd: "make -n install BATCH=yes | tail -n +2"
+  register: check_install_result
+  changed_when: check_install_result.stdout | length > 0
+  become: true
+  become_user: root
+
+- name: "Install port '{{ port_name }}' (but NOT its package dependencies)"
+  ansible.builtin.command:
+    chdir: "{{ port_path }}"
+    cmd: "make reinstall BATCH=yes"
+  become: true
+  become_user: root
+  when: check_install_result.changed
+
