@@ -32,6 +32,7 @@
     version: "{{ freebsd_ports_src_tree_branch }}"
     depth: 1
     update: true
+    force: true
   become: true
   become_user: root
 
