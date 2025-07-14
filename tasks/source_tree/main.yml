@@ -22,7 +22,7 @@
 - name: "Use '{{ system_rel_result.stdout }}' source tree repo branch"
   set_fact:
     freebsd_ports_src_tree_branch: "{{ system_rel_result.stdout }}"
-    when: freebsd_ports_src_tree_to_build_from == 'system_release'
+  when: freebsd_ports_src_tree_to_build_from == 'system_release'
 
 - name: "Update source tree '{{ freebsd_ports_src_tree_branch }}' branch at '{{ freebsd_ports_src_tree_path_on_system }}'"
   ansible.builtin.git:
